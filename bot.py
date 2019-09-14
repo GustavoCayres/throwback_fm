@@ -16,7 +16,8 @@ def main():
     try:
         port = os.environ["PORT"]
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.bind(("127.0.0.1", int(port)))
+        s.bind(("", int(port)))
+        s.listen(5)
     except KeyError:
         pass
 
