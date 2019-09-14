@@ -1,4 +1,5 @@
 import os
+import socket
 
 from telegram.ext import Updater, CommandHandler
 
@@ -11,12 +12,14 @@ def main():
     for command in available_commands:
         dp.add_handler(CommandHandler(*command))
 
-    port = os.getenv("PORT")
-    if port:
-        print(f"Will start HTTP server at port {port}")
-        updater.start_webhook(port=port)
-    else:
-        updater.start_polling()
+    updater.start_polling()
+    try:
+        port = os.environ["PORT"]
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.bind(("127.0.0.1", int(port)))
+    except KeyError:
+        pass
+
     updater.idle()
 
 
