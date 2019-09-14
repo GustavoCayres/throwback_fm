@@ -11,7 +11,11 @@ def main():
     for command in available_commands:
         dp.add_handler(CommandHandler(*command))
 
-    updater.start_polling()
+    port = os.getenv("PORT")
+    if port:
+        updater.start_webhook(port=port)
+    else:
+        updater.start_polling()
     updater.idle()
 
 
