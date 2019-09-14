@@ -13,6 +13,7 @@ def main():
 
     port = os.getenv("PORT")
     if port:
+        print(f"Will start HTTP server at port {port}")
         updater.start_webhook(port=port)
     else:
         updater.start_polling()
