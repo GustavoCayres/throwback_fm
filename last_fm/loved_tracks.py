@@ -4,6 +4,7 @@ import random
 import requests
 
 API_ROOT = "http://ws.audioscrobbler.com/2.0/"
+TRACKS_PER_PAGE = 1
 
 
 def get_params(method, **optional):
@@ -15,20 +16,26 @@ def get_params(method, **optional):
     }
 
 
-def get_loved_tracks():
-    response = requests.get(API_ROOT, params=get_params(method="user.getLovedTracks", user="danrawr_"))
+def random_track_index():
+    response = requests.get(API_ROOT, params=get_params(method="user.getLovedTracks", user="danrawr_", limit=1))
     response.raise_for_status()
 
     json = response.json()
-    tracks = json["lovedtracks"]["track"]
-    return tracks
+
+    attributes = json["lovedtracks"]["@attr"]
+    total_tracks = attributes["total"]
+    return random.randint(1, int(total_tracks))
 
 
 def get_random_loved_track():
-    tracks = get_loved_tracks()
-    random_index = random.randrange(len(tracks))
+    index = random_track_index()
+    response = requests.get(API_ROOT,
+                            params=get_params(method="user.getLovedTracks", user="danrawr_", limit=1, page=index))
+    json = response.json()
 
-    return tracks[random_index]
+    track = json["lovedtracks"]["track"][0]
+
+    return track
 
 
 def name(track):
