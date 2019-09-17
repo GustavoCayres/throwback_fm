@@ -1,9 +1,10 @@
 import os
-import socket
+import sys
 
 from telegram.ext import Updater, CommandHandler
 
 from commands import available_commands
+from heroku import keep_alive
 
 
 def main():
@@ -13,15 +14,13 @@ def main():
         dp.add_handler(CommandHandler(*command))
 
     updater.start_polling()
-    try:
-        port = os.environ["PORT"]
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.bind(("", int(port)))
-        s.listen(5)
-    except KeyError:
-        pass
+    print("Pooling for chat messages and idling...", file=sys.stderr, flush=True)
 
-    updater.idle()
+    port = os.getenv("PORT")
+    if port is None:
+        updater.idle()
+    else:
+        keep_alive(os.environ["HEROKU_APP_URL"], port)
 
 
 if __name__ == '__main__':
