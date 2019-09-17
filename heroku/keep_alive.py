@@ -1,5 +1,7 @@
-import os
 import socket
+from time import sleep
+
+from multiping import MultiPing
 
 
 def keep_alive(url, port):
@@ -7,4 +9,9 @@ def keep_alive(url, port):
     s.bind(("", int(port)))
     s.listen(5)
 
-    os.system(f"ping -i 30 {url}")
+    mp = MultiPing([url])
+    while True:
+        sleep(30000)
+        mp.send()
+        responses, no_responses = mp.receive(10)
+        print(responses)
