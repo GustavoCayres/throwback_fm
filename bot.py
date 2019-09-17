@@ -3,14 +3,14 @@ import sys
 
 from telegram.ext import Updater, CommandHandler
 
-from commands import available_commands
+from telegram_integration.commands import AVAILABLE_COMMANDS
 from heroku import keep_alive
 
 
 def main():
     updater = Updater(os.environ["BOT_TOKEN"], use_context=True)
     dp = updater.dispatcher
-    for command in available_commands:
+    for command in AVAILABLE_COMMANDS:
         dp.add_handler(CommandHandler(*command))
 
     updater.start_polling()

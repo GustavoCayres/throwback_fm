@@ -46,10 +46,14 @@ def artist_name(track):
     return track["artist"]["name"]
 
 
+def artist_url(track):
+    return track["artist"]["url"]
+
+
 def url(track):
     return track["url"]
 
 
 def message_for_random_loved_track():
     track = get_random_loved_track()
-    return f"Listen to {name(track)} by {artist_name(track)}\n{url(track)}"
+    return f"*Here's a track we think you'd like to remember:*\n[{name(track)}]({url(track)}) by [{artist_name(track)}]({artist_url(track)})"
