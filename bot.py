@@ -13,14 +13,9 @@ def main():
     for command in AVAILABLE_COMMANDS:
         dp.add_handler(CommandHandler(*command))
 
-    updater.start_polling()
+    updater.start_webhook(webhook_url="https://throwback-fm.herokuapp.com/")
     print("Pooling for chat messages and idling...", file=sys.stderr, flush=True)
-
-    port = os.getenv("PORT")
-    if port is None:
-        updater.idle()
-    else:
-        keep_alive(os.environ["HEROKU_APP_URL"], port)
+    updater.idle()
 
 
 if __name__ == '__main__':
