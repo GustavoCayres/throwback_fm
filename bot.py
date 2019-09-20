@@ -4,7 +4,6 @@ import sys
 from telegram.ext import Updater, CommandHandler
 
 from telegram_integration.commands import AVAILABLE_COMMANDS
-from heroku import keep_alive
 
 
 def main():
