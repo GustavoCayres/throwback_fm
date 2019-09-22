@@ -1,26 +1,12 @@
-import os
 import random
 
-import requests
+from . import api
 
-API_ROOT = "http://ws.audioscrobbler.com/2.0/"
 TRACKS_PER_PAGE = 1
 
 
-def get_params(method, **optional):
-    return {
-        "api_key": os.environ["LAST_FM_API_KEY"],
-        "format": "json",
-        "method": method,
-        **optional
-    }
-
-
 def random_track_index():
-    response = requests.get(API_ROOT, params=get_params(method="user.getLovedTracks", user="danrawr_", limit=1))
-    response.raise_for_status()
-
-    json = response.json()
+    json = api.get(method="user.getLovedTracks", limit=1)
 
     attributes = json["lovedtracks"]["@attr"]
     total_tracks = attributes["total"]
@@ -29,9 +15,7 @@ def random_track_index():
 
 def get_random_loved_track():
     index = random_track_index()
-    response = requests.get(API_ROOT,
-                            params=get_params(method="user.getLovedTracks", user="danrawr_", limit=1, page=index))
-    json = response.json()
+    json = api.get(method="user.getLovedTracks", limit=1, page=index)
 
     track = json["lovedtracks"]["track"][0]
 

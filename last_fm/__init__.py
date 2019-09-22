@@ -1,1 +1,2 @@
 from .loved_tracks import message_for_random_loved_track
+from .listened_artists import message_for_random_listened_artist
