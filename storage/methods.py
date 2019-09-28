@@ -4,20 +4,20 @@ from storage.engine import db_engine
 from storage.tables import users
 
 
-def register(lastfm_name, telegram_name):
+def register(lastfm_user, telegram_id):
     with db_engine.connect() as conn:
         try:
-            statement = users.insert().values(lastfm_name=lastfm_name, telegram_name=telegram_name)
+            statement = users.insert().values(lastfm_user=lastfm_user, telegram_id=telegram_id)
         except IntegrityError:
-            statement = users.update().where(telegram_name=telegram_name).values(lastfm_name=lastfm_name)
+            statement = users.update().where(telegram_id=telegram_id).values(lastfm_user=lastfm_user)
 
         conn.execute(statement)
 
 
-def get_lastfm_user(telegram_user_id):
+def get_lastfm_user(telegram_id):
     with db_engine.connect() as conn:
 
-        statement = users.select().where(users.c.telegram_name == str(telegram_user_id))
+        statement = users.select().where(users.c.telegram_id == telegram_id)
 
         lastfm_users = list(conn.execute(statement))
         if len(lastfm_users) != 1:

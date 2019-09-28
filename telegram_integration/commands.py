@@ -1,5 +1,3 @@
-import sys
-
 from telegram import Update, ParseMode
 from telegram.ext import CallbackContext
 
@@ -18,21 +16,21 @@ def register_user(update: Update, context: CallbackContext):
         return
 
     lastfm_user = context.args[0]
-    storage.register(lastfm_name=lastfm_user, telegram_name=update.message.from_user.id)
+    storage.register(lastfm_user=lastfm_user, telegram_id=update.message.from_user.id)
     send_message(update, context, text=f"LastFM user {lastfm_user} registered successfully")
 
 
 def send_random_loved_track(update: Update, context: CallbackContext):
-    print("Sending random loved track", file=sys.stderr, flush=True)
-    lastfm_user = storage.get_lastfm_user(update.message.from_user.id)
+    logger.error("Sending random loved track")
+    lastfm_user = storage.get_lastfm_user(telegram_id=update.message.from_user.id)
 
     context.bot.send_message(chat_id=update.message.chat_id, text=message_for_random_loved_track(user=lastfm_user),
                              parse_mode=ParseMode.MARKDOWN)
 
 
 def send_random_listened_artist(update: Update, context: CallbackContext):
-    print("Sending random listened artist", file=sys.stderr, flush=True)
-    lastfm_user = storage.get_lastfm_user(update.message.from_user.id)
+    logger.error("Sending random listened artist")
+    lastfm_user = storage.get_lastfm_user(telegram_id=update.message.from_user.id)
     context.bot.send_message(chat_id=update.message.chat_id, text=message_for_random_listened_artist(user=lastfm_user),
                              parse_mode=ParseMode.MARKDOWN)
 
