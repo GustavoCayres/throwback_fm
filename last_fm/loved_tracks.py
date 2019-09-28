@@ -5,21 +5,14 @@ from . import api
 TRACKS_PER_PAGE = 1
 
 
-def random_track_index():
-    json = api.get(method="user.getLovedTracks", limit=1)
-
-    attributes = json["lovedtracks"]["@attr"]
-    total_tracks = attributes["total"]
-    return random.randint(1, int(total_tracks))
+def random_track_index(user):
+    return random.randint(1, api.get_total_loved_tracks(user=user))
 
 
-def get_random_loved_track():
-    index = random_track_index()
-    json = api.get(method="user.getLovedTracks", limit=1, page=index)
+def get_random_loved_track(user):
+    index = random_track_index(user)
 
-    track = json["lovedtracks"]["track"][0]
-
-    return track
+    return api.get_loved_track(user, index)
 
 
 def name(track):
@@ -38,6 +31,6 @@ def url(track):
     return track["url"]
 
 
-def message_for_random_loved_track():
-    track = get_random_loved_track()
+def message_for_random_loved_track(user):
+    track = get_random_loved_track(user)
     return f"*Here's a track we think you'd like to remember:*\n[{name(track)}]({url(track)}) by [{artist_name(track)}]({artist_url(track)})"

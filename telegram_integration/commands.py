@@ -24,7 +24,9 @@ def register_user(update: Update, context: CallbackContext):
 
 def send_random_loved_track(update: Update, context: CallbackContext):
     print("Sending random loved track", file=sys.stderr, flush=True)
-    context.bot.send_message(chat_id=update.message.chat_id, text=message_for_random_loved_track(),
+    lastfm_user = storage.get_lastfm_user(update.message.from_user.id)
+
+    context.bot.send_message(chat_id=update.message.chat_id, text=message_for_random_loved_track(user=lastfm_user),
                              parse_mode=ParseMode.MARKDOWN)
 
 

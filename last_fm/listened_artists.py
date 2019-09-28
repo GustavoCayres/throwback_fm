@@ -6,17 +6,12 @@ from last_fm import api
 PERCENTAGE_OF_VALID_ARTISTS = .3
 
 
-def total_artists(user):
-    json = api.get(user=user, method="user.getTopArtists", limit=1)
-    return int(json["topartists"]["@attr"]["total"])
-
-
 class NoArtistsException(Exception):
     pass
 
 
 def artist_index(user):
-    n = total_artists(user)
+    n = api.get_total_artists(user)
     if n == 0:
         raise NoArtistsException
 
@@ -25,8 +20,7 @@ def artist_index(user):
 
 def get_random_artist(user):
     index = artist_index(user)
-    json = api.get(user=user, method="user.getTopArtists", limit=1, page=index)
-    return json["topartists"]["artist"][0]
+    return api.get_top_artist(user, index)
 
 
 def name(artist):

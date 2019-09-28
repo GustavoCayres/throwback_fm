@@ -1,6 +1,5 @@
 from sqlalchemy.exc import IntegrityError
 
-import logger
 from storage.engine import db_engine
 from storage.tables import users
 
