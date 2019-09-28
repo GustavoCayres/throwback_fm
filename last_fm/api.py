@@ -26,3 +26,25 @@ def get(method, user, **kwargs):
         raise e
 
     return response.json()
+
+
+def get_top_artist(user, index):
+    json = get(user=user, method="user.getTopArtists", limit=1, page=index)
+    return json["topartists"]["artist"][0]
+
+
+def get_total_artists(user):
+    json = get(user=user, method="user.getTopArtists", limit=1)
+    return int(json["topartists"]["@attr"]["total"])
+
+
+def get_total_loved_tracks(user):
+    json = get(user=user, method="user.getLovedTracks", limit=1)
+
+    return json["lovedtracks"]["@attr"]["total"]
+
+
+def get_loved_track(user, index):
+    json = get(user=user, method="user.getLovedTracks", limit=1, page=index)
+
+    return json["lovedtracks"]["track"][0]
