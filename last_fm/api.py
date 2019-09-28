@@ -17,8 +17,8 @@ def _params(method, **optional):
     }
 
 
-def get(method, **kwargs):
-    response = requests.get(API_ROOT, params=_params(method=method, user="danrawr_", **kwargs))
+def get(method, user, **kwargs):
+    response = requests.get(API_ROOT, params=_params(method=method, user=user, **kwargs))
     try:
         response.raise_for_status()
     except Exception as e:
