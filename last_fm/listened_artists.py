@@ -2,6 +2,7 @@ from math import ceil
 from random import randrange
 
 from last_fm import api
+from telegram_integration import messages
 
 PERCENTAGE_OF_VALID_ARTISTS = .3
 
@@ -31,6 +32,6 @@ def message_for_random_listened_artist(user):
     try:
         artist = get_random_artist(user)
     except api.NoArtistsException:
-        return "It seems you haven't listened to anything yet..."
+        return messages.NEVER_LISTENED_TO_A_TRACK
 
-    return f"*Here's an artist you might like to remember:*\n[{name(artist)}]({url(artist)})"
+    return messages.LISTENED_ARTIST(name(artist), url(artist))

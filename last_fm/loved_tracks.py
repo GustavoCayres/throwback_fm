@@ -1,5 +1,6 @@
 import random
 
+from telegram_integration import messages
 from . import api
 
 TRACKS_PER_PAGE = 1
@@ -39,5 +40,6 @@ def message_for_random_loved_track(user):
     try:
         track = get_random_loved_track(user)
     except api.NoLovedTracks:
-        return "You never loved a song!"
-    return f"*Here's a track we think you'd like to remember:*\n[{name(track)}]({url(track)}) by [{artist_name(track)}]({artist_url(track)})"
+        return messages.NEVER_LOVED_A_TRACK
+
+    return messages.LOVED_TRACK(name(track), url(track), artist_name(track), artist_url(track))
