@@ -8,6 +8,18 @@ API_ROOT = "http://ws.audioscrobbler.com/2.0/"
 TRACKS_PER_PAGE = 1
 
 
+class NoArtistsException(Exception):
+    pass
+
+
+class NoLovedTracks(Exception):
+    pass
+
+
+class UserNotFound(Exception):
+    pass
+
+
 def _params(method, **optional):
     return {
         "api_key": os.environ["LAST_FM_API_KEY"],
@@ -21,7 +33,10 @@ def _get(method, user, **kwargs):
     response = requests.get(API_ROOT, params=_params(method=method, user=user, **kwargs))
     try:
         response.raise_for_status()
-    except Exception as e:
+    except requests.exceptions.HTTPError as e:
+        if response.status_code == 404:
+            raise UserNotFound
+
         logger.error(response.json())
         raise e
 

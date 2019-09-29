@@ -6,14 +6,10 @@ from last_fm import api
 PERCENTAGE_OF_VALID_ARTISTS = .3
 
 
-class NoArtistsException(Exception):
-    pass
-
-
 def artist_index(user):
     n = api.get_total_artists(user)
     if n == 0:
-        raise NoArtistsException
+        raise api.NoArtistsException
 
     return randrange(1, ceil(n * PERCENTAGE_OF_VALID_ARTISTS) + 1)
 
@@ -34,7 +30,7 @@ def url(artist):
 def message_for_random_listened_artist(user):
     try:
         artist = get_random_artist(user)
-    except NoArtistsException:
+    except api.NoArtistsException:
         return "It seems you haven't listened to anything yet..."
 
     return f"*Here's an artist you might like to remember:*\n[{name(artist)}]({url(artist)})"

@@ -16,8 +16,8 @@ def register_user(update: Update, context: CallbackContext):
         return
 
     lastfm_user = context.args[0]
-    storage.register(lastfm_user=lastfm_user, telegram_id=update.message.from_user.id)
-    send_message(update, context, text=f"LastFM user {lastfm_user} registered successfully")
+    message = storage.register(lastfm_user=lastfm_user, telegram_id=update.message.from_user.id)
+    send_message(update, context, text=message)
 
 
 def send_random_loved_track(update: Update, context: CallbackContext):

@@ -5,14 +5,10 @@ from . import api
 TRACKS_PER_PAGE = 1
 
 
-class NoLovedTracks(Exception):
-    pass
-
-
 def random_track_index(user):
     total_loved_tracks = api.get_total_loved_tracks(user=user)
     if total_loved_tracks == 0:
-        raise NoLovedTracks
+        raise api.NoLovedTracks
 
     return random.randint(1, total_loved_tracks)
 
@@ -42,6 +38,6 @@ def url(track):
 def message_for_random_loved_track(user):
     try:
         track = get_random_loved_track(user)
-    except NoLovedTracks:
+    except api.NoLovedTracks:
         return "You never loved a song!"
     return f"*Here's a track we think you'd like to remember:*\n[{name(track)}]({url(track)}) by [{artist_name(track)}]({artist_url(track)})"
