@@ -8,7 +8,7 @@ TRACKS_PER_PAGE = 1
 
 
 def random_track_index(user):
-    total_loved_tracks = api.get_total_loved_tracks(user=user)
+    total_loved_tracks = user.total_loved_tracks
 
     if total_loved_tracks == 0:
         raise api.NoLovedTracks
@@ -18,7 +18,11 @@ def random_track_index(user):
 def get_random_loved_track(user):
     index = random_track_index(user)
 
-    return api.get_loved_track(user, index)
+    track, total = api.get_loved_track(user.lastfm_user, index, with_total=True)
+    user.total_loved_tracks = total
+    user.save()
+
+    return track
 
 
 def name(track):

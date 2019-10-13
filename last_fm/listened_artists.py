@@ -8,16 +8,20 @@ PERCENTAGE_OF_VALID_ARTISTS = .3
 
 
 def artist_index(user):
-    n = api.get_total_artists(user)
-    if n == 0:
+    total_artists = user.total_artists
+    if total_artists == 0:
         raise api.NoArtistsException
 
-    return randrange(1, ceil(n * PERCENTAGE_OF_VALID_ARTISTS) + 1)
+    return randrange(1, ceil(total_artists * PERCENTAGE_OF_VALID_ARTISTS) + 1)
 
 
 def get_random_artist(user):
     index = artist_index(user)
-    return api.get_top_artist(user, index)
+    artist, total = api.get_top_artist(user.lastfm_user, index, with_total=True)
+    user.total_artists = total
+    user.save()
+
+    return artist
 
 
 def name(artist):

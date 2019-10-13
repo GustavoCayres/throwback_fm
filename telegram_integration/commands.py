@@ -2,9 +2,8 @@ from telegram import Update, ParseMode
 from telegram.ext import CallbackContext
 
 import logger
-import storage
 from last_fm import message_for_random_loved_track, message_for_random_listened_artist
-from storage.methods import NoRegisteredUser
+from storage.models import User, NoRegisteredUser
 from telegram_integration import messages
 from telegram_integration.messages import NO_USER_REGISTERED
 
@@ -27,18 +26,18 @@ def register_user(update: Update, context: CallbackContext):
         return
 
     lastfm_user = context.args[0]
-    message = storage.register(lastfm_user=lastfm_user, telegram_id=update.message.from_user.id)
+    message = User.register(lastfm_user=lastfm_user, telegram_id=update.message.from_user.id)
     _send_message(update, context, text=message)
 
 
 def send_random_loved_track(update: Update, context: CallbackContext):
     logger.error("Sending random loved track")
     try:
-        lastfm_user = storage.get_lastfm_user(telegram_id=update.message.from_user.id)
+        user = User.get(telegram_id=update.message.from_user.id)
     except NoRegisteredUser:
         message = NO_USER_REGISTERED
     else:
-        message = message_for_random_loved_track(user=lastfm_user)
+        message = message_for_random_loved_track(user=user)
 
     _send_message(update, context, text=message)
 
@@ -46,11 +45,11 @@ def send_random_loved_track(update: Update, context: CallbackContext):
 def send_random_listened_artist(update: Update, context: CallbackContext):
     logger.error("Sending random listened artist")
     try:
-        lastfm_user = storage.get_lastfm_user(telegram_id=update.message.from_user.id)
+        user = User.get(telegram_id=update.message.from_user.id)
     except NoRegisteredUser:
         message = NO_USER_REGISTERED
     else:
-        message = message_for_random_listened_artist(user=lastfm_user)
+        message = message_for_random_listened_artist(user=user)
 
     _send_message(update, context, text=message)
 

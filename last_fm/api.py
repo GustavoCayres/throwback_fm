@@ -43,9 +43,13 @@ def _get(method, user, **kwargs):
     return response.json()
 
 
-def get_top_artist(user, index):
+def get_top_artist(user, index, with_total=False):
     json = _get(user=user, method="user.getTopArtists", limit=1, page=index)
-    return json["topartists"]["artist"][0]
+    artist = json["topartists"]["artist"][0]
+    if with_total:
+        total = int(json["topartists"]["@attr"]["total"])
+        return artist, total
+    return artist
 
 
 def get_total_artists(user):
@@ -59,7 +63,12 @@ def get_total_loved_tracks(user):
     return int(json["lovedtracks"]["@attr"]["total"])
 
 
-def get_loved_track(user, index):
+def get_loved_track(user, index, with_total=False):
     json = _get(user=user, method="user.getLovedTracks", limit=1, page=index)
 
-    return json["lovedtracks"]["track"][0]
+    track = json["lovedtracks"]["track"][0]
+    if with_total:
+        total = int(json["lovedtracks"]["@attr"]["total"])
+        return track, total
+
+    return track
