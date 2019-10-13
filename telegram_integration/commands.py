@@ -43,15 +43,18 @@ def send_random_loved_track(update: Update, context: CallbackContext):
 
 
 def send_random_listened_artist(update: Update, context: CallbackContext):
-    logger.error("Sending random listened artist")
     try:
-        user = User.get(telegram_id=update.message.from_user.id)
-    except NoRegisteredUser:
-        message = NO_USER_REGISTERED
-    else:
-        message = message_for_random_listened_artist(user=user)
+        logger.error("Sending random listened artist")
+        try:
+            user = User.get(telegram_id=update.message.from_user.id)
+        except NoRegisteredUser:
+            message = NO_USER_REGISTERED
+        else:
+            message = message_for_random_listened_artist(user=user)
 
-    _send_message(update, context, text=message)
+        _send_message(update, context, text=message)
+    except Exception as e:
+        logger.error(e, type(e))
 
 
 AVAILABLE_COMMANDS = (

@@ -51,7 +51,7 @@ class User:
                                                       total_loved_tracks=total_loved_tracks)
                 conn.execute(statement)
             except IntegrityError:
-                statement = cls.table.update().where(telegram_id=telegram_id).values(
+                statement = cls.table.update().where(cls.table.c.telegram_id == telegram_id).values(
                     lastfm_user=lastfm_user,
                     total_artists=total_artists,
                     total_loved_tracks=total_loved_tracks
@@ -62,7 +62,7 @@ class User:
 
     def save(self):
         with db_engine.connect() as conn:
-            statement = self.table.update().where(telegram_id=self.telegram_id).values(
+            statement = self.table.update().where(self.table.c.telegram_id == self.telegram_id).values(
                 lastfm_user=self.lastfm_user,
                 total_artists=self.total_artists,
                 total_loved_tracks=self.total_loved_tracks
