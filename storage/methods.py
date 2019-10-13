@@ -5,6 +5,10 @@ from storage.engine import db_engine
 from storage.tables import users
 
 
+class NoRegisteredUser(Exception):
+    pass
+
+
 def register(lastfm_user, telegram_id):
     try:
         total_artists = api.get_total_artists(lastfm_user)
@@ -31,7 +35,7 @@ def get_lastfm_user(telegram_id):
         statement = users.select().where(users.c.telegram_id == telegram_id)
 
         lastfm_users = list(conn.execute(statement))
-        if len(lastfm_users) != 1:
-            return None
+        if len(lastfm_users) == 0:
+            raise NoRegisteredUser
 
         return lastfm_users[0][0]

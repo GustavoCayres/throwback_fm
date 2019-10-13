@@ -1,6 +1,7 @@
 NEVER_LOVED_A_TRACK = "Boo boo... It seens you haven't loved any song yet... Start clicking the heart button on last.fm so we'll be able to help you remember the songs you really like!"
 NEVER_LISTENED_TO_A_TRACK = "Hey! It seens you haven't listened to anything yet! What you're waiting for? Get it started!"
 LASTFM_USER_NOT_FOUND = "We could not find the user you typed... Please check it and try again!"
+NO_USER_REGISTERED = "First, register a LastFM user with the /register command"
 SOMETHING_WENT_WRONG = "Something went wrong! Please try again later!"
 REGISTERED_WITH_SUCCESS = "Success! Now we can start remembering! Type /loved or /listened to see the magic happening!"
 HELP = """Type:
