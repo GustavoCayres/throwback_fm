@@ -9,7 +9,6 @@ TRACKS_PER_PAGE = 1
 
 def random_track_index(user):
     total_loved_tracks = api.get_total_loved_tracks(user=user)
-    logger.error(total_loved_tracks)
 
     if total_loved_tracks == 0:
         raise api.NoLovedTracks

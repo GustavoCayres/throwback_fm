@@ -2,7 +2,7 @@ from sqlalchemy.exc import IntegrityError
 
 from last_fm import api
 from storage.engine import db_engine
-from storage.tables import users
+from storage.table import users
 
 
 class NoRegisteredUser(Exception):
@@ -20,12 +20,12 @@ def register(lastfm_user, telegram_id):
         try:
             statement = users.insert().values(lastfm_user=lastfm_user, telegram_id=telegram_id,
                                               total_artists=total_artists, total_loved_tracks=total_loved_tracks)
+            conn.execute(statement)
         except IntegrityError:
             statement = users.update().where(telegram_id=telegram_id).values(lastfm_user=lastfm_user,
                                                                              total_artists=total_artists,
                                                                              total_loved_tracks=total_loved_tracks)
-
-        conn.execute(statement)
+            conn.execute(statement)
 
     return f"LastFM user {lastfm_user} registered successfully"
 
